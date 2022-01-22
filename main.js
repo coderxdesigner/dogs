@@ -1,3 +1,6 @@
+let timer
+let deleteFirst
+
 async function start() {
   const response = await fetch("https://dog.ceo/api/breeds/list/all")
   const data = await response.json()
@@ -27,16 +30,18 @@ async function loadByBreed(breed) {
 
 function createSlideShow(images) {
   let currentPosition = 0
+  clearInterval(timer)
+  clearTimeout(deleteFirst)
   document.getElementById("slideshow").innerHTML = `
   <div class="slide" style="background-image:url(${images[0]})"></div>
   <div class="slide" style="background-image:url(${images[1]})"></div>
   `
   currentPosition += 2
-  setInterval(nextSlide, 3000)
+  timer = setInterval(nextSlide, 3000)
 
   function nextSlide() {
     document.getElementById("slideshow").insertAdjacentHTML("beforeend", `<div class="slide" style="background-image:url(${images[currentPosition]})"></div>`)
-    setTimeout(function () {
+    deleteFirst = setTimeout(function () {
       document.querySelector(".slide").remove()
     }, 1000)
     if (currentPosition + 1 >= images.length) {
